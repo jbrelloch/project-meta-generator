@@ -10,5 +10,5 @@ object PropertyConstants {
   val MYSQL_TABLES_KEY: String = "database.mysql.tables"
 
   val ELASTIC_CLUSTER_NAME_KEY: String = "database.elastic.clusterName"
-  val ELASTIC_INDICES_KEYS: String = "database.elastic.alertIndex,database.elastic.alertType,database.elastic.aptType"
+  val ELASTIC_INDICES_KEY: String = "database.elastic.indices"
 }

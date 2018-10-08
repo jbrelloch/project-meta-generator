@@ -9,7 +9,7 @@ case object DefaultElasticExtractor extends DependencyExtractor {
   override def extract(input: String,
       currentDependencies: Map[String, Dependency]): T = {
     val currentDependency = currentDependencies
-      .getOrElse(DatabaseDependency.getClass.getSimpleName, DatabaseDependency("elastic", "", List.empty)).asInstanceOf[DatabaseDependency]
+      .getOrElse(DefaultElasticExtractor.getClass.getSimpleName, DatabaseDependency("elastic", "", List.empty)).asInstanceOf[DatabaseDependency]
 
     if(input.contains(PropertyConstants.ELASTIC_CLUSTER_NAME_KEY)) {
       DatabaseDependency(
@@ -17,7 +17,7 @@ case object DefaultElasticExtractor extends DependencyExtractor {
         input.split("=")(1),
         currentDependency.tables
       )
-    } else if(input.contains(PropertyConstants.ELASTIC_INDICES_KEYS)) {
+    } else if(input.contains(PropertyConstants.ELASTIC_INDICES_KEY)) {
       DatabaseDependency(
         currentDependency.technology,
         currentDependency.name,

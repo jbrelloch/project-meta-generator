@@ -9,7 +9,7 @@ case object DefaultPerconaExtractor extends DependencyExtractor {
   override def extract(input: String,
       currentDependencies: Map[String, Dependency]): T = {
     val currentDependency = currentDependencies
-      .getOrElse(DatabaseDependency.getClass.getSimpleName, DatabaseDependency("percona", "", List.empty)).asInstanceOf[DatabaseDependency]
+      .getOrElse(DefaultPerconaExtractor.getClass.getSimpleName, DatabaseDependency("percona", "", List.empty)).asInstanceOf[DatabaseDependency]
 
     if(input.contains(PropertyConstants.MYSQL_DB_NAME_KEY)) {
       DatabaseDependency(

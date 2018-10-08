@@ -9,14 +9,14 @@ case object DefaultKafkaExtractor extends DependencyExtractor {
   override def extract(input: String,
       currentDependencies: Map[String, Dependency]): T = {
     val currentDependency = currentDependencies
-      .getOrElse(KafkaDependency.getClass.getSimpleName, KafkaDependency(List.empty, List.empty)).asInstanceOf[KafkaDependency]
+      .getOrElse(DefaultKafkaExtractor.getClass.getSimpleName, KafkaDependency(List.empty, List.empty)).asInstanceOf[KafkaDependency]
 
     if(input.contains(PropertyConstants.KAFKA_CONSUMER_KEY)) {
       KafkaDependency(
         currentDependency.consumers ++ List(KafkaConsumerTopic(input.split("=")(1))),
         currentDependency.producers
       )
-    } else if(input.contains(PropertyConstants.KAFKA_CONSUMER_KEY)) {
+    } else if(input.contains(PropertyConstants.KAFKA_PRODUCER_KEY)) {
       KafkaDependency(
         currentDependency.consumers,
         currentDependency.producers ++ List(KafkaProducerTopic(input.split("=")(1)))

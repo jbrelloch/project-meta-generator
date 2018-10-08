@@ -39,29 +39,29 @@ object ProjectMetaGenerator extends AutoPlugin  {
       val projectMeta = ProjectMeta(
         projectDef,
         projectOwner.value,
-        processPropertyFile(dependencyFileName.value, projectDef.propertyIdentifier, extractorMap.value)
+        processPropertyFile(retrievePropertyFile(dependencyFileName.value), projectDef.propertyIdentifier, extractorMap.value)
       )
 
       generationStrategy.value.generateProjectDefinition(projectMeta)
     })
   }
 
-  private def processPropertyFile(fileName: String,
+  def retrievePropertyFile(fileName: String): Iterator[String] = Source.fromFile(fileName).getLines()
+
+  def processPropertyFile(propertyFileLines: Iterator[String],
       projectIdentifier: Option[String],
       extractorMap: Map[String, DependencyExtractor]): List[Dependency] = {
-    val fileInput = Source.fromFile(fileName)
-
     val dependencies = scala.collection.mutable.Map[String, Dependency]()
 
     val prependProjectIdentifier = projectIdentifier.map(_ + ".").getOrElse("")
 
-    fileInput.getLines().foreach(inputLine => {
+    propertyFileLines.foreach(inputLine => {
       extractorMap.find {
         case (key , _) => inputLine.startsWith(prependProjectIdentifier + key)
       }.foreach {
         case (_, extractor) =>
           val processedDependency = extractor.extract(inputLine, dependencies.toMap)
-          dependencies.put(processedDependency.getClass.getSimpleName, processedDependency)
+          dependencies.put(extractor.getClass.getSimpleName, processedDependency)
       }
     })
 

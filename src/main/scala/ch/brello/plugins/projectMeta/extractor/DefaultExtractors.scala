@@ -7,7 +7,7 @@ object DefaultExtractors {
     (PropertyConstants.MYSQL_DB_NAME_KEY, DefaultPerconaExtractor),
     (PropertyConstants.MYSQL_TABLES_KEY, DefaultPerconaExtractor),
     (PropertyConstants.ELASTIC_CLUSTER_NAME_KEY, DefaultElasticExtractor),
-    (PropertyConstants.ELASTIC_INDICES_KEYS, DefaultElasticExtractor)/*,
+    (PropertyConstants.ELASTIC_INDICES_KEY, DefaultElasticExtractor)/*,
     (PropertyConstants.REST_ENDPOINTS_KEY, Def)*/
   )
 }

@@ -9,7 +9,8 @@ lazy val projectMetaGenerator = (project in file(".")).
     sbtVersion := "0.13.7",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.module" % "jackson-modules-base" % "2.9.2",
-      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.2"
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.2",
+      "org.scalatest" %% "scalatest" % "2.2.6" % "test"
     )
   )
 
