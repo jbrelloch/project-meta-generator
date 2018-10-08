@@ -11,13 +11,13 @@ case object DefaultPerconaExtractor extends DependencyExtractor {
     val currentDependency = currentDependencies
       .getOrElse(DefaultPerconaExtractor.getClass.getSimpleName, DatabaseDependency("percona", "", List.empty)).asInstanceOf[DatabaseDependency]
 
-    if(input.contains(PropertyConstants.MYSQL_DB_NAME_KEY)) {
+    if(input.contains(PropertyConstants.PERCONA_DB_NAME_KEY)) {
       DatabaseDependency(
         currentDependency.technology,
         input.split("=")(1).split("/").last,
         currentDependency.tables
       )
-    } else if(input.contains(PropertyConstants.MYSQL_TABLES_KEY)) {
+    } else if(input.contains(PropertyConstants.PERCONA_TABLES_KEY)) {
       DatabaseDependency(
         currentDependency.technology,
         currentDependency.name,

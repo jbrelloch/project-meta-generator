@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.{JsonCreator, JsonIgnore, JsonProperty}
 class RestDependency @JsonCreator() (
     @JsonProperty("type")
     override val dependencyType: String,
-    endpoints: List[RestEndpoint]) extends Dependency {
+    val endpoints: List[RestEndpoint]) extends Dependency {
 
   @JsonIgnore
   def this(endpoints: List[RestEndpoint]) = this("rest", endpoints)
