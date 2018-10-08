@@ -3,18 +3,17 @@ package ch.brello.plugins.projectMeta
 import ch.brello.plugins.projectMeta.extractor.{DefaultExtractors, DependencyExtractor}
 import ch.brello.plugins.projectMeta.models.dependencies.Dependency
 import ch.brello.plugins.projectMeta.models.{Owner, Project, ProjectMeta}
-import ch.brello.plugins.projectMeta.strategies.{GenerationStrategy, PrintStrategy}
+import ch.brello.plugins.projectMeta.strategies.read.{FileReadStrategy, ReadStrategy}
+import ch.brello.plugins.projectMeta.strategies.write.{JsonPrintlnWriteStrategy, WriteStrategy}
 import sbt._
-
-import scala.io.Source
 
 object ProjectMetaGenerator extends AutoPlugin  {
   object autoImport {
     val projectDefinitions = settingKey[List[Project]]("The list of project descriptions")
     val projectOwner = settingKey[Owner]("The owner")
-    val dependencyFileName = settingKey[String]("The file name to read dependencies from")
     val generatedDefinitionPrefix = settingKey[String]("The prefix to be applied to each model generation")
-    val generationStrategy = settingKey[GenerationStrategy]("The method to generate the model")
+    val writeStrategy = settingKey[WriteStrategy]("The method to write the model")
+    val readStrategy = settingKey[ReadStrategy]("The method to read the properties")
     val extractorMap = settingKey[Map[String, DependencyExtractor]]("The map used to extract dependencies from the properties file")
 
     val buildProjectMeta = inputKey[Unit]("Writes project meta definition")
@@ -24,9 +23,9 @@ object ProjectMetaGenerator extends AutoPlugin  {
 
   override lazy val buildSettings: Seq[Def.Setting[_]] = Seq(
     extractorMap := DefaultExtractors.map,
-    dependencyFileName := "src/main/resources/local.properties",
     generatedDefinitionPrefix := "micro_meta",
-    generationStrategy := PrintStrategy()
+    writeStrategy := JsonPrintlnWriteStrategy(),
+    readStrategy := FileReadStrategy("src/main/resources/local.properties")
   )
 
   override def projectSettings: Seq[Def.Setting[_]] = Seq(
@@ -39,16 +38,14 @@ object ProjectMetaGenerator extends AutoPlugin  {
       val projectMeta = ProjectMeta(
         projectDef,
         projectOwner.value,
-        processPropertyFile(retrievePropertyFile(dependencyFileName.value), projectDef.propertyIdentifier, extractorMap.value)
+        processProperties(readStrategy.value.retrieveProperties, projectDef.propertyIdentifier, extractorMap.value)
       )
 
-      generationStrategy.value.generateProjectDefinition(projectMeta)
+      writeStrategy.value.generateProjectDefinition(projectMeta)
     })
   }
 
-  def retrievePropertyFile(fileName: String): Iterator[String] = Source.fromFile(fileName).getLines()
-
-  def processPropertyFile(propertyFileLines: Iterator[String],
+  def processProperties(propertyFileLines: List[String],
       projectIdentifier: Option[String],
       extractorMap: Map[String, DependencyExtractor]): List[Dependency] = {
     val dependencies = scala.collection.mutable.Map[String, Dependency]()

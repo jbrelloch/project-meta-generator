@@ -10,9 +10,9 @@ class ProjectMetaGeneratorSpec extends WordSpec {
     val line2 = "kafka.topics.input.test2=inputTopic2"
     val line3 = "kafka.topics.output.test1=outputTopic1"
 
-    val lineIterator = Iterator(line1, line2, line3)
+    val lineIterator = List(line1, line2, line3)
 
-    val processedPropertyFile = ProjectMetaGenerator.processPropertyFile(lineIterator, None, DefaultExtractors.map)
+    val processedPropertyFile = ProjectMetaGenerator.processProperties(lineIterator, None, DefaultExtractors.map)
 
     assert(processedPropertyFile != null)
     assert(processedPropertyFile.size == 1)

@@ -1,7 +1,7 @@
-package ch.brello.plugins.projectMeta.strategies
+package ch.brello.plugins.projectMeta.strategies.write
 
 import ch.brello.plugins.projectMeta.models.ProjectMeta
 
-trait GenerationStrategy {
+trait WriteStrategy {
   def generateProjectDefinition(projectMeta: ProjectMeta): Unit
 }

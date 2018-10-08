@@ -13,5 +13,3 @@ lazy val projectMetaGenerator = (project in file(".")).
       "org.scalatest" %% "scalatest" % "2.2.6" % "test"
     )
   )
-
-//initialCommands in console := "import ch.brello.plugins.projectMeta._"

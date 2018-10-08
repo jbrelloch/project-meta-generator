@@ -17,6 +17,6 @@ object ProjectMeta {
   mapper.registerModule(DefaultScalaModule)
 
   def toJson(projectMeta: ProjectMeta): String = {
-    mapper.writeValueAsString(projectMeta)
+    mapper.writerWithDefaultPrettyPrinter().writeValueAsString(projectMeta)
   }
 }
